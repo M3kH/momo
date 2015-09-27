@@ -1,24 +1,18 @@
 #!/usr/bin/env node
 var spawn = require('child_process').spawn,
-//matchbox-window-manager -use_titlebar no -use_cursor no &
-    chrome  = spawn('matchbox-window-manager', [
-          '-use_titlebar',
-          'no',
-          '-user_cursor',
-          'no',
-          '&',
-          'chromium',
-          '--app=http://google.com'
-    ]);
+  //matchbox-window-manager -use_titlebar no -use_cursor no &
+  chrome = spawn('sh', ['./utils/chrome_start.sh'], {
+    cwd: __dirname
+  });
 
-chrome.stdout.on('data', function (data) {
+chrome.stdout.on('data', function(data) {
   console.log('stdout: ' + data);
 });
 
-chrome.stderr.on('data', function (data) {
+chrome.stderr.on('data', function(data) {
   console.log('stderr: ' + data);
 });
 
-chrome.on('close', function (code) {
+chrome.on('close', function(code) {
   console.log('child process exited with code ' + code);
 });
