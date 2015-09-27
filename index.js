@@ -1,6 +1,15 @@
 #!/usr/bin/env node
 var spawn = require('child_process').spawn,
-    chrome  = spawn('chromium', ['--app=http://google.com']);
+//matchbox-window-manager -use_titlebar no -use_cursor no &
+    chrome  = spawn('matchbox-window-manager', [
+          '-use_titlebar',
+          'no',
+          '-user_cursor',
+          'no',
+          '&',
+          'chromium',
+          '--app=http://google.com'
+    ]);
 
 chrome.stdout.on('data', function (data) {
   console.log('stdout: ' + data);
