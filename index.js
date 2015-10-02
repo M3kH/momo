@@ -1,10 +1,17 @@
 #!/usr/bin/env node
-var io = require('socket.io')(8080);
+var io = require('socket.io')(),
+    user = 0;
 
 // Here connection is created
 io.on('connection', function( socket ){
+  user++;
+
   // Just emit a message
-  socket.emit('news', {hello: 'world!'});
+  io.sockets.emit('news', {hello: 'world!', users: user});
+
+  socket.on('disconnect', function(){
+    user = user-1;
+  });
 
   // Just listen to some other events.
   socket.on('mediacenter', function(data){
@@ -26,4 +33,9 @@ io.on('connection', function( socket ){
         console.log('child process exited with code ' + code);
       });
   });
+
+
+
 });
+
+io.listen(3033);

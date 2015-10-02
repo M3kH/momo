@@ -1,0 +1,57 @@
+<html>
+<head>
+  <title>Momo ~ DashBoard</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    qr-code canvas{
+      width: 100px;
+      height: 100px;
+    }
+  </style>
+</head>
+<body>
+  <navigation>
+    <a href="#airplay">Dashboard</a>
+    <a href="#multimedia" >Multimedia Center</a>
+    <a href="#emulstation" >Emulstation</a>
+    <a href="#airplay" >AirPlay Audio</a>
+  </navigation>
+  <dashboard>
+    <div id="no-user">
+      <h3>Hey there!</h3>
+      <p>
+        Still not a device connected here!<br/>
+        Scan this code with your phone to get the control of the ship!
+      </p>
+      <qr-code></qr-code>
+    </div>
+    <div id="no-user">
+      <h3>Welcome on board Capitan!</h3>
+      <p>I'm at your services.</p>
+      <img src="cat.png" />
+    </div>
+  </dashboard>
+  <script type="text/javascript" src="node_components/babel-core/browser.js"></script>
+  <script type="text/javascript" src="components/system.js/dist/system.js"></script>
+  <script>
+      System.config({
+        transpiler: 'babel',
+        defaultJSExtensions: true,
+        paths: {
+          io: "components/socket.io-client/socket.io.js",
+          signals: "components/js-signals/dist/signals.min.js",
+          hasher: "components/hasher/dist/js/hasher.min.js",
+          qrgen: "components/jsqrgen/dist/qrgen.min.js"
+        },
+        meta: {
+          'hasher': {
+            deps: ['signals']
+          }
+        }
+      });
+
+      // load index.js
+      System.import('js/index');
+  </script>
+</body>
+</html>
