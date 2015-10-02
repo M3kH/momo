@@ -7,19 +7,20 @@ io.on('connection', function( socket ){
   user++;
 
   // Just emit a message
-  io.sockets.emit('news', {hello: 'world!', users: user});
+  io.sockets.emit('client-connected', {totalClients: user});
 
   socket.on('disconnect', function(){
-    user = user-1;
+    user--;
+    io.sockets.emit('client-disconnect', {totalClients: user});
   });
 
   // Just listen to some other events.
   socket.on('mediacenter', function(data){
       var spawn = require('child_process').spawn,
-        //matchbox-window-manager -use_titlebar no -use_cursor no &
-        chrome = spawn('sh', ['./utils/chrome_start.sh'], {
-          cwd: __dirname
-        });
+          // matchbox-window-manager -use_titlebar no -use_cursor no &
+          chrome = spawn('sh', ['./utils/chrome_start.sh'], {
+            cwd: __dirname
+          });
 
       chrome.stdout.on('data', function(data) {
         console.log('stdout: ' + data);

@@ -8,20 +8,35 @@ export default class App {
     if(!io) return this.error('No socket io passed');
 
     this.config = {
-      socketUrl: 'http://'+window.location.host+':3033'
+      socketUrl: 'http://'+window.location.host+':3033',
+      dashboard: false
     };
 
-    this.bindIoEvents(io);
+    this.actions = {
+      'connect': data => this.onConnect(data),
+      'client-connected': data => this.onClientConnect(data),
+      'client-disconnect': data => this.onClientDisconnect(data),
+      'show-dashboard': data => this.onShowDashboard(data),
+      'disconnect': data => this.onDisconnect(data)
+    };
+
+    this.routes = {
+      'dashboard': data => this.onShowDashboard(data),
+      'controller': data => this.onShowController(data)
+    };
+
+    this.bindIo(io);
   }
 
-  bindIoEvents(io){
-      var socket;
-      this.socket = socket = io(this.config.socketUrl);
+  bindIoEvent(event, action){
+    this.socket.on(event, action);
+  }
 
-      socket.on('connect', this.onConnect);
-      socket.on('news', data => console.log(data) );
-      socket.on('show-dashboard', this.onShowDashboard);
-      socket.on('disconnect', this.onDisconnect);
+  bindIo(io){
+      this.socket = io(this.config.socketUrl);
+      for(let event in this.actions ){
+        this.bindIoEvent(event, this.actions[event]);
+      }
   }
 
   router (newRoute, oldRoute){
@@ -39,15 +54,14 @@ export default class App {
 
   onShow( route ){
     this.onResetMain();
-    console.log(route);
-    var canvas = qrgen.canvas({
-            data: location.href+'#client'
-    });
-    document.getElementsByTagName('qr-code')[0].appendChild(canvas);
+    this.routes[route]();
   }
 
   onShowDashboard(data){
-
+    var canvas = qrgen.canvas({
+      data: window.location.host+window.location.pathname+'#client'
+    });
+    document.getElementsByTagName('qr-code')[0].appendChild(canvas);
   }
 
   onDisconnect(){
