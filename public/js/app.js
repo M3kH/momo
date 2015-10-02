@@ -8,7 +8,7 @@ export default class App {
     if(!io) return this.error('No socket io passed');
 
     this.config = {
-      socketUrl: 'http://192.168.1.11:3033'
+      socketUrl: 'http://'+window.location.host+':3033'
     };
 
     this.bindIoEvents(io);
