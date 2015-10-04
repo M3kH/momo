@@ -14,7 +14,8 @@ export default class App {
 
     this.options = {
       socketUrl: 'http://' + window.location.host + ':3033',
-      dashboard: false
+      dashboard: false,
+      connected: false
     };
 
     this.actions = {
@@ -22,6 +23,7 @@ export default class App {
       'client:connected': data => this.onClientConnect(data),
       'client:disconnect': data => this.onClientDisconnect(data),
       'show:dashboard': data => this.onShowDashboard(data),
+      'server:ip': data => this.onGetServerIp(data),
       'disconnect': data => this.onDisconnect(data)
     };
 
@@ -94,6 +96,9 @@ export default class App {
 
   onConnect() {
     console.log('is connected!');
+    this.options.connected = true;
+    $('.content').toggleClass('hide', false);
+    $('.loading').toggleClass('hide', true);
   }
 
   onClientConnect(data) {
@@ -118,12 +123,21 @@ export default class App {
   }
 
   addQrCode(url) {
-    $('qr-code').html(this.utils.getQrCode(url));
+    $('qr-code').html(this.utils.getQrCode(url)).append(`<p>or go to this url:<br/> ${url}</p>`);
   }
 
   onShowDashboard(data) {
     this.options.dashboard = true;
-    this.utils.getLocalIp(ip => this.addQrCode('http://' + ip + window.location.pathname + '#controller'));
+    try{
+      this.utils.getLocalIp(ip => this.addQrCode('http://' + ip + window.location.pathname + '#controller'));
+    }catch(e){
+      this.socket.emit('get:ip');
+      this.socket.on('server:ip', ip => this.addQrCode('http://' + ip + window.location.pathname + '#controller') )
+    }
+  }
+
+  onGetServerIp(){
+
   }
 
   onShowController() {
@@ -131,7 +145,9 @@ export default class App {
   }
 
   onDisconnect() {
-
+    this.options.connected = false;
+    $('.content').toggleClass('hide', true);
+    $('.loading').toggleClass('hide', false);
   }
 
   error(message) {
