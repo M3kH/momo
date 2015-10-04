@@ -204,7 +204,7 @@ module.exports = class App {
   }
 
   spawnEmulstation(out, err, close) {
-    this.emulstation = spawn('emulstation', {
+    this.emulstation = spawn('emulationstation', {
       cwd: __dirname
     });
 
