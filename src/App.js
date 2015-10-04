@@ -1,8 +1,10 @@
-import io from 'socket.io';
-import child_process from 'child_process';
+"use strict"
+
+var io = require('socket.io'),
+    child_process = require('child_process');
 var spawn = child_process.spawn;
 
-export default class App {
+module.exports = class App {
 
   constructor() {
     this.createIoServer();
@@ -221,7 +223,7 @@ export default class App {
 
   spawnVirtualController(out, err, close) {
     this.vcontroller = spawn('sudo', ['node', 'main.js'], {
-      cwd: __dirname + '/../node_modules/virtual-gamepads/'
+      cwd: __dirname + '/../../virtual-gamepads/'
     });
 
     if (out) this.vcontroller.stdout.on('data', out);

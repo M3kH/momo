@@ -1,3 +1,3 @@
 #!/usr/bin/env node
-import App from './src/App.js';
+var App = require('./src/App.js');
 new App();
