@@ -9,7 +9,7 @@ export default class App {
     this.users = 0;
 
     this.options = {
-      defaultMode: 'emulstation'
+      defaultMode: 'dashboard'
     }
 
     this.modes = {
