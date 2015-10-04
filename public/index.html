@@ -1,0 +1,142 @@
+<html>
+<head>
+  <title>Momo ~ DashBoard</title>
+  <link rel="stylesheet" href="components/materialize/dist/css/materialize.min.css">
+  <style>
+    body{
+      text-align: center;
+    }
+
+    .content{
+      margin: 0 auto;
+    }
+
+    .valign-wrapper{
+      width: 100%;
+      height: 100%;
+    }
+
+    qr-code canvas{
+      width: 100px;
+      height: 100px;
+    }
+
+    navigation .row .col .card{
+      min-width: 200px;
+    }
+
+    @media all and (min-width: 400px) {
+      navigation .row .col .card{
+        min-width: 400px;
+      }
+    }
+
+    @media all and (min-width: 800px) {
+      navigation .row .col .card{
+        min-width: 800px;
+      }
+    }
+
+    @media all and (min-width: 1024px) {
+      navigation .row .col .card{
+        min-width: 1024px;
+      }
+    }
+
+
+  </style>
+</head>
+<body>
+  <div class="valign-wrapper">
+    <div class="content valign">
+      <navigation class="hide-on-large-only">
+
+        <div class="row">
+        <div class="col s12">
+
+          <a href="#" class="js-start-dashboard">
+            <div class="card blue-grey darken-1">
+              <div class="card-content white-text">
+                <a href="#" class="js-start-dashboard">
+                  <span class="card-title">Dashboard</span>
+                </a>
+                <p>The overview page</p>
+              </div>
+            </div>
+          </a>
+
+          <a href="#" class="js-start-multimedia">
+            <div class="card blue-grey darken-1">
+              <div class="card-content white-text">
+                <span class="card-title">Multimedia</span>
+                <p>Watch a Movie</p>
+              </div>
+            </div>
+          </a>
+
+          <a href="#" class="js-start-emulstation">
+            <div class="card blue-grey darken-1 js-start-emulstation">
+              <div class="card-content white-text">
+                <span class="card-title">Emulstation</span>
+                <p>Play a Game</p>
+              </div>
+            </div>
+          </a>
+
+          <a href="#" class="js-start-audiorepeater">
+            <div class="card blue-grey darken-1">
+              <div class="card-content white-text">
+                <a href="#" class="js-start-audiorepeater"><span class="card-title">Audio Repiter</span></a>
+                <p>Stream your music where you want</p>
+              </div>
+            </div>
+          </a>
+
+        </div>
+      </div>
+      </navigation>
+
+      <dashboard class="hide-on-med-and-down">
+        <div id="no-user">
+          <h3>Hey there!</h3>
+          <p>
+            Still not a device connected here!<br/>
+            Scan this code with your phone to get the control of the ship!
+          </p>
+          <qr-code></qr-code>
+        </div>
+        <div id="user-connected" class="hide">
+          <h3>Welcome on board Capitan!</h3>
+          <h4>I'm at your services.</h4>
+          <img src="img/cat.png" alt="" class="circle" width="200">
+        </div>
+      </dashboard>
+
+    </div>
+  </div>
+
+  <script type="text/javascript" src="node_components/babel-core/browser.js"></script>
+  <script type="text/javascript" src="components/system.js/dist/system.js"></script>
+  <script>
+      System.config({
+        transpiler: 'babel',
+        defaultJSExtensions: true,
+        paths: {
+          jQuery: "components/jquery/dist/jquery.min.js",
+          io: "components/socket.io-client/socket.io.js",
+          signals: "components/js-signals/dist/signals.min.js",
+          hasher: "components/hasher/dist/js/hasher.min.js",
+          qrgen: "components/jsqrgen/dist/qrgen.min.js"
+        },
+        meta: {
+          'hasher': {
+            deps: ['signals']
+          }
+        }
+      });
+
+      // load index.js
+      System.import('js/index');
+  </script>
+</body>
+</html>
