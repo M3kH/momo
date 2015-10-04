@@ -202,7 +202,7 @@ export default class App {
   }
 
   spawnEmulstation(out, err, close) {
-    this.emulstation = spawn('emulstation', {
+    this.emulstation = spawn('emulationstation', {
       cwd: __dirname
     });
 
@@ -221,7 +221,7 @@ export default class App {
 
   spawnVirtualController(out, err, close) {
     this.vcontroller = spawn('sudo', ['node', 'main.js'], {
-      cwd: __dirname + '/../node_modules/virtual-gamepads/'
+      cwd: __dirname + '/../../virtual-gamepads/'
     });
 
     if (out) this.vcontroller.stdout.on('data', out);
