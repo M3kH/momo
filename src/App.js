@@ -1,10 +1,8 @@
-"use strict"
-
-var io = require('socket.io'),
-    child_process = require('child_process');
+import io from 'socket.io';
+import child_process from 'child_process';
 var spawn = child_process.spawn;
 
-module.exports = class App {
+export default class App {
 
   constructor() {
     this.createIoServer();
