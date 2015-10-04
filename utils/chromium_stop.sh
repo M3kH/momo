@@ -3,6 +3,7 @@
 #while true; do
 
 # Clean up previously running apps, gracefully at first then harshly
+/etc/init.d/lightdm stop
 killall -TERM chromium 2>/dev/null;
 killall -TERM matchbox-window-manager 2>/dev/null;
 sleep 2;
