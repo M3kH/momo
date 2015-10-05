@@ -19,4 +19,4 @@ xwit -root -warp $( cat /sys/module/*fb*/parameters/fbwidth ) $( cat /sys/module
 matchbox-window-manager -use_titlebar no -use_cursor no &
 
 # Start the browser (See http://peter.sh/experiments/chromium-command-line-switches/)
-chromium  --app=http://localhost/#dashboard --user-data-dir=/home/pi/
+chromium  --app=http://localhost/#dashboard
