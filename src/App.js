@@ -8,6 +8,7 @@ var spawn = child_process.spawn,
 export default class App {
 
   constructor() {
+    var self = this;
     this.createIoServer();
     this.users = 0;
 
@@ -41,7 +42,7 @@ export default class App {
       'mediacenter': data => this.changeMode('mediacenter'),
       'emulstation': data => this.changeMode('emulstation'),
       'audiorepeater': data => this.changeMode('audiorepeater'),
-      'get:ip': (data, socket) => this.getIpAddress(data, socket)
+      'get:ip': (data, socket) => self.getIpAdress(data, socket)
     };
 
     this.startMode();

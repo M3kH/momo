@@ -23,7 +23,7 @@ export default class App {
       'client:connected': data => this.onClientConnect(data),
       'client:disconnect': data => this.onClientDisconnect(data),
       'show:dashboard': data => this.onShowDashboard(data),
-      'server:ip': data => this.onGetServerIp(data),
+      'server:ip': data => this.addQrCode('http://' + data.serverIp + window.location.pathname + '#controller'),
       'disconnect': data => this.onDisconnect(data)
     };
 
@@ -41,8 +41,8 @@ export default class App {
   }
 
   init(){
-    this.setHasher();
     this.bindIo();
+    this.setHasher();
     this.setUi();
   }
 
@@ -132,7 +132,6 @@ export default class App {
       this.utils.getLocalIp(ip => this.addQrCode('http://' + ip + window.location.pathname + '#controller'));
     }catch(e){
       this.socket.emit('get:ip');
-      this.socket.on('server:ip', ip => this.addQrCode('http://' + ip + window.location.pathname + '#controller') )
     }
   }
 
