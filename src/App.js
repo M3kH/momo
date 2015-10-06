@@ -12,8 +12,10 @@ export default class App {
     this.createIoServer();
     this.users = 0;
 
+    this.debug = (process.platform !== 'linux');
+
     this.options = {
-      defaultMode: 'dashboard'
+      defaultMode: false
     }
 
     this.modes = {
@@ -71,7 +73,7 @@ export default class App {
 
   startMode(mode) {
     this.currentMode = mode = mode || this.options.defaultMode;
-    if (typeof this.modes[mode].start === 'function') {
+    if (this.modes[mode] && typeof this.modes[mode].start === 'function') {
       this.modes[mode].start();
     }
   }
@@ -100,21 +102,23 @@ export default class App {
   onStartEmulstation() {
     console.log('Emulstation start');
 
+    if(this.debug) return false;
     this.spawnEmulstation(
-      out => console.log(out.toString('utf8')),
+      out => console.log(out),
       err => console.log(err),
       close => console.log('Emulstation close')
     );
 
     this.spawnVirtualController(
-      out => console.log(out.toString('utf8')),
-      err => console.log(err.toString('utf8')),
+      out => console.log(out),
+      err => console.log(err),
       close => console.log('Virtual controller close')
     );
   }
 
   onStopEmulstation(cb) {
     console.log('Emulstation stop');
+    if(this.debug) return cb ? cb() : false;
     this.killEmulstation();
     console.log('Virtual controller close');
     this.killVirtualController();
@@ -122,19 +126,25 @@ export default class App {
   }
 
   onStartMediacenter(){
+    console.log('Mediacenter start');
+    if(this.debug) return false;
     this.spawnEmulstation(
-      out => console.log(out.toString('utf8')),
-      err => console.log(err.toString('utf8')),
+      out => console.log(out),
+      err => console.log(err),
       close => console.log('Emulstation start')
     );
   }
 
   onStopMediacenter(cb){
+    console.log('Mediacenter stop');
+    if(this.debug) return cb ? cb() : false;
     this.killKodi();
     if(cb) cb();
   }
 
   onStartAirReplay(){
+    console.log('Airplay start');
+    if(this.debug) return false;
     this.spawnShairport(
       out => console.log(out.toString('utf8')),
       err => console.log(err.toString('utf8')),
@@ -143,6 +153,8 @@ export default class App {
   }
 
   onStopAirReplay(cb){
+    console.log('Airplay stop');
+    if(this.debug) return cb ? cb() : false;
     this.killShairport();
     if(cb) cb();
   }
@@ -151,19 +163,21 @@ export default class App {
 
   // Spawn actions ---- START
   onChromeStart() {
+    if(this.debug) return false;
     this.runScriptUtil(
       './utils/chromium_stop.sh',
-      out => console.log(out.toString('utf8')),
-      err => console.log(err.toString('utf8')),
+      out => console.log(out),
+      err => console.log(err),
       exit => this.runScriptUtil('./utils/chromium_start.sh')
     );
   }
 
   onChromeStop(cb) {
+    if(this.debug) return cb ? cb() : false;
     this.runScriptUtil(
       './utils/chromium_stop.sh',
-      out => console.log(out.toString('utf8')),
-      err => console.log(err.toString('utf8')),
+      out => console.log(out),
+      err => console.log(err),
       exit => () => {
         if (cb) cb();
       }(exit)

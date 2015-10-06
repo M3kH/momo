@@ -48,16 +48,11 @@ export default class App {
 
   setUi(){
     var self = this;
-    $('.js-start-dashboard').on('click', (e) => {
+    $('.js-change-method').on('click', (e) => {
       e.preventDefault();
-      console.log('Dashboard mode change');
-      self.socket.emit('dashboard', {});
-      return false;
-    });
-    $('.js-start-emulstation').on('click', (e) => {
-      e.preventDefault();
-      console.log('Emulstation mode change');
-      self.socket.emit('emulstation', {});
+      var method = $(e.currentTarget).data('method');
+      console.log(method);
+      self.socket.emit(method, {});
       return false;
     });
   }
