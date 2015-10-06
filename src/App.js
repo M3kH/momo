@@ -12,10 +12,10 @@ export default class App {
     this.createIoServer();
     this.users = 0;
 
-    this.debug = (process.platform !== 'linux');
+    this.debug = (process.platform === 'darwin');
 
     this.options = {
-      defaultMode: false
+      defaultMode: 'dashboard'
     }
 
     this.modes = {
@@ -165,17 +165,17 @@ export default class App {
   onChromeStart() {
     if(this.debug) return false;
     this.runScriptUtil(
-      './utils/chromium_stop.sh',
+      'utils/chromium_stop.sh',
       out => console.log(out),
       err => console.log(err),
-      exit => this.runScriptUtil('./utils/chromium_start.sh')
+      exit => this.runScriptUtil('utils/chromium_start.sh')
     );
   }
 
   onChromeStop(cb) {
     if(this.debug) return cb ? cb() : false;
     this.runScriptUtil(
-      './utils/chromium_stop.sh',
+      'utils/chromium_stop.sh',
       out => console.log(out),
       err => console.log(err),
       exit => () => {
