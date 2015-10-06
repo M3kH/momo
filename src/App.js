@@ -163,18 +163,18 @@ export default class App {
 
   // Spawn actions ---- START
   spawnChromeStart() {
+    // su - pi -c 'startx' &
     if(this.debug) return false;
-    this.runScriptUtil('utils/chromium_start.sh',
-      out => console.log(out),
-      err => console.log(err),
-      close => console.log('Chrome close')
-    );
+    var chrome = spawn('su', ['-', 'pi', '-c', '\'startx\''] );
+    if (out) chrome.stdout.on('data', out);
+    if (err) chrome.stderr.on('data', err);
+    if (close) chrome.on('close', close);
   }
 
   spawnChromeStop(cb) {
     if(this.debug) return cb ? cb() : false;
     this.runScriptUtil(
-      'utils/chromium_stop.sh',
+      'utils/stopx.sh',
       out => console.log(out),
       err => console.log(err),
       exit => () => {
