@@ -48,7 +48,7 @@ export default class App {
 
   setUi(){
     var self = this;
-    $('.js-change-method').on('click', (e) => {
+    $('.js-change-method').on('click touchstart', (e) => {
       e.preventDefault();
       var method = $(e.currentTarget).data('method');
       console.log(method);
