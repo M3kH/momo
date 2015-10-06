@@ -166,8 +166,8 @@ export default class App {
     // su - pi -c 'startx' &
     if(this.debug) return false;
     var chrome = spawn('su', ['-', 'pi', '-c', '\'startx\''] );
-    chrome.stdout.on('data', out => console.log(out.toString('UTF-8'));
-    chrome.stderr.on('data', err => console.log(err.toString('UTF-8'));
+    chrome.stdout.on('data', out => console.log(out.toString('utf8')));
+    chrome.stderr.on('data', err => console.log(err.toString('utf8')));
     chrome.on('close', close => console.log('Chrome as been close'));
   }
 
@@ -188,8 +188,8 @@ export default class App {
       cwd: __dirname
     });
 
-    if (out) this.airreplay.stdout.on('data', out.toString('UTF-8'));
-    if (err) this.airreplay.stderr.on('data', err.toString('UTF-8'));
+    if (out) this.airreplay.stdout.on('data', out.toString('utf8'));
+    if (err) this.airreplay.stderr.on('data', err.toString('utf8'));
     if (close) this.airreplay.on('close', close);
   }
 
@@ -206,8 +206,8 @@ export default class App {
       cwd: __dirname
     });
 
-    if (out) this.kodi.stdout.on('data', out.toString('UTF-8'));
-    if (err) this.kodi.stderr.on('data', err.toString('UTF-8'));
+    if (out) this.kodi.stdout.on('data', out.toString('utf8'));
+    if (err) this.kodi.stderr.on('data', err.toString('utf8'));
     if (close) this.kodi.on('close', close);
   }
 
@@ -224,8 +224,8 @@ export default class App {
       cwd: __dirname
     });
 
-    if (out) this.emulstation.stdout.on('data', out.toString('UTF-8'));
-    if (err) this.emulstation.stderr.on('data', err.toString('UTF-8'));
+    if (out) this.emulstation.stdout.on('data', out.toString('utf8'));
+    if (err) this.emulstation.stderr.on('data', err.toString('utf8'));
     if (close) this.emulstation.on('close', close);
   }
 
@@ -242,8 +242,8 @@ export default class App {
       cwd: __dirname + '/../../virtual-gamepads/'
     });
 
-    if (out) this.vcontroller.stdout.on('data', out.toString('UTF-8'));
-    if (err) this.vcontroller.stderr.on('data', err.toString('UTF-8'));
+    if (out) this.vcontroller.stdout.on('data', out.toString('utf8'));
+    if (err) this.vcontroller.stderr.on('data', err.toString('utf8'));
     if (close) this.vcontroller.on('close', close);
   }
 
@@ -259,8 +259,8 @@ export default class App {
     // su - pi -c "sh ~/momo/utils/chromium_start.sh"
     var chrome = spawn('bash', [`${__dirname}/../${script}`] );
 
-    if (out) chrome.stdout.on('data', out.toString('UTF-8'));
-    if (err) chrome.stderr.on('data', err.toString('UTF-8'));
+    if (out) chrome.stdout.on('data', out.toString('utf8'));
+    if (err) chrome.stderr.on('data', err.toString('utf8'));
     if (close) chrome.on('close', close);
   }
 
