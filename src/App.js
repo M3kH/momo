@@ -257,9 +257,7 @@ export default class App {
 
   runScriptUtil(script, out, err, close) {
     // su - pi -c "sh ~/momo/utils/chromium_start.sh"
-    var chrome = spawn(`su - pi -c "sh ${__dirname}/../${script}"`, [], {
-      cwd: __dirname + '/../'
-    });
+    var chrome = spawn('bash', [`${__dirname}/../${script}`] );
 
     if (out) chrome.stdout.on('data', out);
     if (err) chrome.stderr.on('data', err);
