@@ -91,12 +91,12 @@ export default class App {
   // Modes events ---- START
   onStartDashboard() {
     console.log('Dashboard Start');
-    this.onChromeStart();
+    this.spawnChromeStart();
   }
 
   onStopDashboard(cb) {
     console.log('Dashboard stop');
-    this.onChromeStop(cb);
+    this.spawnChromeStop(cb);
   }
 
   onStartEmulstation() {
@@ -162,17 +162,16 @@ export default class App {
 
 
   // Spawn actions ---- START
-  onChromeStart() {
+  spawnChromeStart() {
     if(this.debug) return false;
-    this.runScriptUtil(
-      'utils/chromium_stop.sh',
+    this.runScriptUtil('utils/chromium_start.sh',
       out => console.log(out),
       err => console.log(err),
-      exit => this.runScriptUtil('utils/chromium_start.sh')
+      close => console.log('Chrome close')
     );
   }
 
-  onChromeStop(cb) {
+  spawnChromeStop(cb) {
     if(this.debug) return cb ? cb() : false;
     this.runScriptUtil(
       'utils/chromium_stop.sh',
