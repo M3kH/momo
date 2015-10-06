@@ -166,9 +166,9 @@ export default class App {
     // su - pi -c 'startx' &
     if(this.debug) return false;
     var chrome = spawn('su', ['-', 'pi', '-c', '\'startx\''] );
-    if (out) chrome.stdout.on('data', out);
-    if (err) chrome.stderr.on('data', err);
-    if (close) chrome.on('close', close);
+    chrome.stdout.on('data', out => console.log(out));
+    chrome.stderr.on('data', err => console.log(err));
+    chrome.on('close', close => console.log('Chrome as been close'));
   }
 
   spawnChromeStop(cb) {
