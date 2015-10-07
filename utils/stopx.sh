@@ -2,8 +2,9 @@
 # Origin: http://blogs.wcode.org/2013/09/howto-boot-your-raspberry-pi-into-a-fullscreen-browser-kiosk/
 #while true; do
 
+/etc/init.d/lightdm stop &
+
 # Clean up previously running apps, gracefully at first then harshly
-/etc/init.d/lightdm stop
 killall -TERM chromium 2>/dev/null;
 killall -TERM matchbox-window-manager 2>/dev/null;
 sleep 2;
