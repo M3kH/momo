@@ -177,7 +177,7 @@ export default class App {
     this.startService('shairport-sync', cb);
   }
 
-  killShairport(close) {
+  killShairport(cb) {
     this.stopService('shairport-stop', cb);
   }
 
