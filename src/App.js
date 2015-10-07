@@ -45,11 +45,11 @@ export default class App {
       'emulstation': data => this.changeMode('emulstation'),
       'audiorepeater': data => this.changeMode('audiorepeater'),
       'get:ip': (data, socket) => self.getIpAdress(data, socket),
-      'reboot': (data, socket) => { child_process.exec('sudo reboot', (){
+      'reboot': (data, socket) => (data, socket) => { child_process.exec('sudo reboot', () => {
                                         console.log(arguments);
                                       }
                                     );
-                                  }(data, socket)
+                                  } (data, socket)
     };
 
     this.startMode();
