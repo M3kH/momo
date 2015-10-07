@@ -238,8 +238,8 @@ export default class App {
                             _err => console.log(_err.toString('utf8')) );
 
     chrome.on('close', close ?
-                            _close => close(_close.toString('utf8')) :
-                            _close => console.log(_close.toString('utf8')) );
+                            _close => close(_close) :
+                            _close => console.log(_close) );
   }
 
   startService(service, cb){
