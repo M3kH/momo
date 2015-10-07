@@ -182,7 +182,7 @@ export default class App {
   }
 
   spawnKodi(cb) {
-    this.spawn('kodi', cb);
+    this.spawnFromPi('kodi', cb);
   }
 
   killKodi(cb) {
@@ -255,9 +255,14 @@ export default class App {
       cwd: __dirname+'/../'
     });
 
+    var _close_cb = (close) => {
+      this.active_process = false;
+      return cb ? cb(close) : console.log(close);
+    };
+
     this.active_process.stdout.on('data', out => console.log(out.toString('utf8')) );
     this.active_process.stderr.on('data', err => console.log(err.toString('utf8')) );
-    this.active_process.on('close', cb ? close => cb(close) : close => console.log(close) );
+    this.active_process.on('close', _close_cb );
   }
 
   kill(cb){
@@ -272,11 +277,17 @@ export default class App {
   spawnFromPi(command, cb){
     var _process = spawn('su', ['-', 'pi', '-c', `\'${command}\'`], {
       cwd: __dirname+'/../'
-    });
+    }),
+    _close_cb = (close) => {
+      this.active_process = false;
+      return cb ? cb(close) : console.log(close);
+    };
 
     _process.stdout.on('data', out => console.log(out.toString('utf8')) );
     _process.stderr.on('data', err => console.log(err.toString('utf8')) );
-    _process.on('close', cb ? close => cb(close) : close => console.log(close) );
+    _process.on('close', _close_cb );
+
+    this.active_process = _process;
   }
 
   bindSocketEvents(socket) {
