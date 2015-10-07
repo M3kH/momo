@@ -133,35 +133,25 @@ export default class App {
   onStartMediacenter(){
     console.log('Mediacenter start');
     if(this.debug) return false;
-    this.spawnEmulstation(
-      out => console.log(out),
-      err => console.log(err),
-      close => console.log('Emulstation start')
-    );
+    this.spawnKodi();
   }
 
   onStopMediacenter(cb){
     console.log('Mediacenter stop');
     if(this.debug) return cb ? cb() : false;
-    this.killKodi();
-    if(cb) cb();
+    this.killKodi(cb);
   }
 
-  onStartAirReplay(){
+  onStartAirReplay(cb){
     console.log('Airplay start');
     if(this.debug) return false;
-    this.spawnShairport(
-      out => console.log(out.toString('utf8')),
-      err => console.log(err.toString('utf8')),
-      close => console.log('Shairport start')
-    );
+    this.spawnShairport(cb);
   }
 
   onStopAirReplay(cb){
     console.log('Airplay stop');
     if(this.debug) return cb ? cb() : false;
-    this.killShairport();
-    if(cb) cb();
+    this.killShairport(cb);
   }
   // Modes events ---- STOP
 
@@ -170,58 +160,33 @@ export default class App {
   spawnChromeStart() {
     // su - pi -c 'startx' &
     if(this.debug) return false;
-    var chrome = spawn('su', ['-', 'pi', '-c', '\'startx\''] );
-    chrome.stdout.on('data', out => console.log(out.toString('utf8')));
-    chrome.stderr.on('data', err => console.log(err.toString('utf8')));
-    chrome.on('close', close => console.log('Chrome as been close'));
+    this.spawnFromPi('startx');
   }
 
   spawnChromeStop(cb) {
     if(this.debug) return cb ? cb() : false;
     this.runScriptUtil(
       'utils/stopx.sh',
-      out => console.log(out),
-      err => console.log(err),
-      exit => () => {
-        if (cb) cb();
-      }(exit)
+      false,
+      false,
+      cb ? close => cb(close) : false
     );
   }
 
-  spawnShairport(out, err, close) {
-    this.airreplay = spawn('shairport-sync', {
-      cwd: __dirname
-    });
-
-    if (out) this.airreplay.stdout.on('data', out.toString('utf8'));
-    if (err) this.airreplay.stderr.on('data', err.toString('utf8'));
-    if (close) this.airreplay.on('close', close);
+  spawnShairport(cb) {
+    this.startService('shairport-sync', cb);
   }
 
-  killShairport(out, err, close) {
-    if (this.airreplay) {
-      this.airreplay.stdin.pause();
-      this.airreplay.kill();
-      this.airreplay = false;
-    }
+  killShairport(close) {
+    this.stopService('shairport-stop', cb);
   }
 
-  spawnKodi(out, err, close) {
-    this.kodi = spawn('kodi', {
-      cwd: __dirname
-    });
-
-    if (out) this.kodi.stdout.on('data', out.toString('utf8'));
-    if (err) this.kodi.stderr.on('data', err.toString('utf8'));
-    if (close) this.kodi.on('close', close);
+  spawnKodi(cb) {
+    this.startService('kodi', cb);
   }
 
-  killKodi() {
-    if (this.kodi) {
-      this.kodi.stdin.pause();
-      this.kodi.kill();
-      this.kodi = false;
-    }
+  killKodi(cb) {
+    this.stopService('kodi', cb);
   }
 
   spawnEmulstation(out, err, close) {
@@ -264,9 +229,35 @@ export default class App {
     // su - pi -c "sh ~/momo/utils/chromium_start.sh"
     var chrome = spawn('bash', [`${__dirname}/../${script}`] );
 
-    if (out) chrome.stdout.on('data', out.toString('utf8'));
-    if (err) chrome.stderr.on('data', err.toString('utf8'));
-    if (close) chrome.on('close', close);
+    chrome.stdout.on('data', out ?
+                             _out => out(_out.toString('utf8')) :
+                             _out => console.log(_out.toString('utf8')) );
+
+    chrome.stderr.on('data', err ?
+                            _err => err(_err.toString('utf8')) :
+                            _err => console.log(_err.toString('utf8')) );
+
+    chrome.on('close', close ?
+                            _close => close(_close.toString('utf8')) :
+                            _close => console.log(_close.toString('utf8')) );
+  }
+
+  startService(service, cb){
+    this.spawnFromPi(`/etc/init.d/${service} start`, cb);
+  }
+
+  stopService(service, cb){
+    this.spawnFromPi(`/etc/init.d/${service} stop`, cb);
+  }
+
+  spawnFromPi(command, cb){
+    var _process = spawn('su', ['-', 'pi', '-c', `\'${command}\'`], {
+      cwd: __dirname+'/../'
+    });
+
+    _process.stdout.on('data', out => console.log(out.toString('utf8')) );
+    _process.stderr.on('data', err => console.log(err.toString('utf8')) );
+    _process.on('close', cb ? close => cb(close) : close => console.log(close) );
   }
 
   bindSocketEvents(socket) {
