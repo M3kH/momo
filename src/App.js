@@ -130,10 +130,10 @@ export default class App {
     if (cb) cb();
   }
 
-  onStartMediacenter(){
+  onStartMediacenter(cb){
     console.log('Mediacenter start');
     if(this.debug) return false;
-    this.spawnKodi();
+    this.spawnKodi(cb);
   }
 
   onStopMediacenter(cb){
