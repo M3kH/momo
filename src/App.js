@@ -174,19 +174,19 @@ export default class App {
   }
 
   spawnShairport(cb) {
-    this.startService('shairport-sync', cb);
+    this.spawn('shairport-sync', cb);
   }
 
   killShairport(cb) {
-    this.stopService('shairport-stop', cb);
+    this.kill(cb);
   }
 
   spawnKodi(cb) {
-    this.startService('kodi', cb);
+    this.spawn('kodi', cb);
   }
 
   killKodi(cb) {
-    this.stopService('kodi', cb);
+    this.kill(cb);
   }
 
   spawnEmulstation(out, err, close) {
@@ -248,6 +248,25 @@ export default class App {
 
   stopService(service, cb){
     this.spawnFromPi(`/etc/init.d/${service} stop`, cb);
+  }
+
+  spawn(command, cb){
+    this.active_process = spawn(command, {
+      cwd: __dirname+'/../'
+    });
+
+    this.active_process.stdout.on('data', out => console.log(out.toString('utf8')) );
+    this.active_process.stderr.on('data', err => console.log(err.toString('utf8')) );
+    this.active_process.on('close', cb ? close => cb(close) : close => console.log(close) );
+  }
+
+  kill(cb){
+    if(this.active_process){
+      this.active_process.stdin.pause();
+      this.active_process.kill();
+      this.active_process = false;
+      if(cb) cb();
+    }
   }
 
   spawnFromPi(command, cb){
