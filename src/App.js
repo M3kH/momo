@@ -15,7 +15,7 @@ export default class App {
     this.debug = (process.platform === 'darwin');
 
     this.options = {
-      defaultMode: 'dashboard'
+      defaultMode: false
     }
 
     this.modes = {
@@ -108,7 +108,7 @@ export default class App {
     console.log('Emulstation start');
 
     if(this.debug) return false;
-    this.spawn('emulationstation', cb);
+    this.spawnFromPi('emulationstation', cb);
 
     try{
       this.spawnVirtualController();
