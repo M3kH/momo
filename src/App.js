@@ -110,11 +110,12 @@ export default class App {
     if(this.debug) return false;
     this.spawn('emulationstation', cb);
 
-    this.spawnVirtualController(
-      out => console.log(out),
-      err => console.log(err),
-      close => console.log('Virtual controller close')
-    );
+    try{
+      this.spawnVirtualController();
+      console.log('Virtual Controller :)');
+    }catch(e){
+      console.log('No virtual controller :`(');
+    }
   }
 
   onStopEmulstation(cb) {
@@ -174,9 +175,9 @@ export default class App {
       cwd: __dirname + '/../../virtual-gamepads/'
     });
 
-    if (out) this.vcontroller.stdout.on('data', out.toString('utf8'));
-    if (err) this.vcontroller.stderr.on('data', err.toString('utf8'));
-    if (close) this.vcontroller.on('close', close);
+    this.vcontroller.stdout.on('data', console.log( out.toString('utf8') ) );
+    this.vcontroller.stderr.on('data', console.log( err.toString('utf8') ) );
+    this.vcontroller.on('close', console.log( err.toString('utf8') );
   }
 
   killVirtualController() {
