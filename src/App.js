@@ -177,7 +177,7 @@ export default class App {
 
     this.vcontroller.stdout.on('data', console.log( out.toString('utf8') ) );
     this.vcontroller.stderr.on('data', console.log( err.toString('utf8') ) );
-    this.vcontroller.on('close', console.log( err.toString('utf8') );
+    this.vcontroller.on('close', console.log( err.toString('utf8') ) );
   }
 
   killVirtualController() {
