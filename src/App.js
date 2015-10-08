@@ -104,15 +104,11 @@ export default class App {
     this.spawnChromeStop(cb);
   }
 
-  onStartEmulstation() {
+  onStartEmulstation(cb) {
     console.log('Emulstation start');
 
     if(this.debug) return false;
-    this.spawnEmulstation(
-      out => console.log(out),
-      err => console.log(err),
-      close => console.log('Emulstation close')
-    );
+    this.spawn('emulationstation', cb);
 
     this.spawnVirtualController(
       out => console.log(out),
@@ -124,7 +120,7 @@ export default class App {
   onStopEmulstation(cb) {
     console.log('Emulstation stop');
     if(this.debug) return cb ? cb() : false;
-    this.killEmulstation();
+    this.kill();
     console.log('Virtual controller close');
     this.killVirtualController();
     if (cb) cb();
@@ -133,25 +129,25 @@ export default class App {
   onStartMediacenter(cb){
     console.log('Mediacenter start');
     if(this.debug) return false;
-    this.spawnKodi(cb);
+    this.spawnFromPi('kodi', cb);
   }
 
   onStopMediacenter(cb){
     console.log('Mediacenter stop');
     if(this.debug) return cb ? cb() : false;
-    this.killKodi(cb);
+    this.kill(cb);
   }
 
   onStartAirReplay(cb){
     console.log('Airplay start');
     if(this.debug) return false;
-    this.spawnShairport(cb);
+    this.spawn('shairport-sync', cb);
   }
 
   onStopAirReplay(cb){
     console.log('Airplay stop');
     if(this.debug) return cb ? cb() : false;
-    this.killShairport(cb);
+    this.kill(cb);
   }
   // Modes events ---- STOP
 
@@ -171,40 +167,6 @@ export default class App {
       false,
       cb ? close => cb(close) : false
     );
-  }
-
-  spawnShairport(cb) {
-    this.spawn('shairport-sync', cb);
-  }
-
-  killShairport(cb) {
-    this.kill(cb);
-  }
-
-  spawnKodi(cb) {
-    this.spawnFromPi('kodi', cb);
-  }
-
-  killKodi(cb) {
-    this.kill(cb);
-  }
-
-  spawnEmulstation(out, err, close) {
-    this.emulstation = spawn('emulationstation', {
-      cwd: __dirname
-    });
-
-    if (out) this.emulstation.stdout.on('data', out.toString('utf8'));
-    if (err) this.emulstation.stderr.on('data', err.toString('utf8'));
-    if (close) this.emulstation.on('close', close);
-  }
-
-  killEmulstation() {
-    if (this.kodi) {
-      this.emulstation.stdin.pause();
-      this.emulstation.kill();
-      this.emulstation = false;
-    }
   }
 
   spawnVirtualController(out, err, close) {
@@ -267,10 +229,13 @@ export default class App {
 
   kill(cb){
     if(this.active_process){
-      this.active_process.stdin.pause();
-      this.active_process.kill();
-      this.active_process = false;
-      if(cb) cb();
+      try{
+        process.kill(-this.active_process.pid);
+        if(cb) cb();
+        this.active_process = false;
+      }catch(e){
+        if(cb) cb(e);
+      }
     }
   }
 
