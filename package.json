@@ -4,7 +4,7 @@
   "description": "Simple RaspBerry Modular dashboard",
   "main": "index.js",
   "scripts": {
-    "postinstall": "./node_modules/.bin/bower install && node ./utils/post_install/index.js",
+    "postinstall": "./node_modules/.bin/bower install --config.interactive=false && node ./utils/post_install/index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "./node_modules/.bin/babel-node --stage 0 index.js"
   },
